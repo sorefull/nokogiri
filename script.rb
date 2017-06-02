@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 
 # Fetch and parse HTML document
+system 'curl http://www.nokogiri.org/tutorials/installing_nokogiri.html > page.html'
 
 doc = Nokogiri::HTML(open('http://www.nokogiri.org/tutorials/installing_nokogiri.html'))
 
