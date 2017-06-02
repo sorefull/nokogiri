@@ -1,22 +1,18 @@
 require 'nokogiri'
 require 'open-uri'
 
-# Fetch and parse HTML document
-system 'curl http://www.nokogiri.org/tutorials/installing_nokogiri.html > page.html'
+print 'Enter GitHub username: @'
+username = gets.chomp
 
-doc = Nokogiri::HTML(open('http://www.nokogiri.org/tutorials/installing_nokogiri.html'))
-
-puts "### Search for nodes by css"
-doc.css('nav ul.menu li a', 'article h2').each do |link|
-  puts link.content
+begin
+  doc = Nokogiri::HTML(open("https://github.com/#{username}?tab=repositories"))
+rescue OpenURI::HTTPError
+  abort 'Sorry, no user with this username'
 end
 
-puts "### Search for nodes by xpath"
-doc.xpath('//nav//ul//li/a', '//article//h2').each do |link|
-  puts link.content
-end
+puts
 
-puts "### Or mix and match."
-doc.search('nav ul.menu li a', '//article//h2').each do |link|
-  puts link.content
+doc.css('#user-repositories-list li h3 a').each do |link|
+  repo = link.content.strip
+  puts "#{repo} => https://github.com/#{username}/#{repo}.git"
 end
